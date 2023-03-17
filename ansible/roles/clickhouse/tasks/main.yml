@@ -1,0 +1,47 @@
+---
+# tasks file for clickhouse
+- name: Copy clickhouse rpms
+  ansible.builtin.copy:
+    dest: /tmp
+    src: ch_distr
+    mode: "755"
+
+- name: Install clickhouse rpm from a local file (clickhouse-common-static)
+  ansible.builtin.dnf:
+    name: /tmp/ch_distr/clickhouse-common-static-23.2.4.12.x86_64.rpm
+    state: present
+    disable_gpg_check: true
+
+- name: Install clickhouse rpm from a local file (clickhouse-server)
+  ansible.builtin.dnf:
+    name: /tmp/ch_distr/clickhouse-server-23.2.4.12.x86_64.rpm
+    state: present
+    disable_gpg_check: true
+
+- name: Install clickhouse rpm from a local file (clickhouse-client)
+  ansible.builtin.dnf:
+    name: /tmp/ch_distr/clickhouse-client-23.2.4.12.x86_64.rpm
+    state: present
+    disable_gpg_check: true
+
+- name: Copy clickhouse config
+  ansible.builtin.template:
+    dest: /etc/clickhouse-server/config.xml
+    src: ch_config/config.xml.j2
+    owner: clickhouse
+    group: clickhouse
+    mode: "400"
+
+- name: Copy clickhouse cluster config
+  ansible.builtin.template:
+    dest: /etc/clickhouse-server/cluster.xml
+    src: ch_config/cluster.xml.j2
+    owner: clickhouse
+    group: clickhouse
+    mode: "400"
+
+- name: Start clickhouse service
+  ansible.builtin.service:
+    name: clickhouse-server
+    state: restarted
+    enabled: yes

@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<clickhouse>
+    <clickhouse_remote_servers>
+        <mycluster> // Название кластера
+
+            <shard> // Конфигурация один шард и три реплики
+
+                <internal_replication>true</internal_replication> // при использовании zookeeper - true
+
+                <replica>
+                    <host>{{ ch1 }}</host> // первая нода в нашем кластере
+                    <port>9000</port>
+                </replica>
+
+                <replica>
+                    <host>{{ ch2 }}</host> // вторая нода в нашем кластере
+                    <port>9000</port>
+                </replica>
+
+                <replica>
+                    <host>{{ ch3 }}</host> // третья нода в нашем кластере
+                    <port>9000</port>
+                </replica>
+
+            </shard>
+
+<!--            <shard>-->
+<!--                <replica>-->
+<!--                    <host>{{ ch2 }}</host> // вторая нода в нашем кластере-->
+<!--                    <port>9000</port>-->
+<!--                </replica>-->
+<!--            </shard>-->
+
+<!--            <shard>-->
+<!--                <replica>-->
+<!--                    <host>{{ ch3 }}</host> // третья нода в нашем кластере-->
+<!--                    <port>9000</port>-->
+<!--                </replica>-->
+<!--            </shard>-->
+
+        </mycluster>
+    </clickhouse_remote_servers>
+
+    <zookeeper-servers>
+        <node index="1">
+            <host>{{ ch1 }}</host> // сервер зукипер
+            <port>2181</port> // порт для подключения
+        </node>
+
+        <node index="2">
+            <host>{{ ch2 }}</host> // сервер зукипер
+            <port>2181</port> // порт для подключения
+        </node>
+
+        <node index="3">
+            <host>{{ ch3 }}</host> // сервер зукипер
+            <port>2181</port> // порт для подключения
+        </node>
+    </zookeeper-servers>
+
+    <macros>
+        <cluster>mycluster</cluster> // название кластера
+        <replica>{{ ansible_facts["all_ipv4_addresses"][0] }}</replica> // Адрес данной машины
+        <shard>01</shard> // Шард данной машины
+    </macros>
+
+</clickhouse>

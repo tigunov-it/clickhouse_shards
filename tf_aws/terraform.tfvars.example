@@ -1,0 +1,5 @@
+client_ip_address = ["xx.xx.xxx.xx/32", "xxx.xx.xx.xxx/32", "xxx.xxx.xxx.xx/32"] // curl api.ipify.org
+allow_ingress_ports = ["22"]
+path_to_private_key = "~/path_to_key"
+aws_key_name = "key_name"
+devs = ["ch1", "ch2", "ch3"]

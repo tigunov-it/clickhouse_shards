@@ -1,0 +1,9 @@
+---
+- name: clickhouse
+  hosts: all
+  become: true
+  roles:
+    - name: clickhouse
+      tags: ch
+    - name: zookeeper
+      tags: zk
