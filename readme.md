@@ -1,0 +1,3 @@
+Terraform manifest and ansible roles for create and deploy ClickHouse cluster
+
+ClickHouse is an open-source column-oriented DBMS (columnar database management system) for online analytical processing (OLAP) that allows users to generate analytical reports using SQL queries in real-time. ClickHouse Inc. is headquartered in the Bay Area of California, United States with the subsidiary, ClickHouse B.V., based in Amsterdam, Netherlands. 
