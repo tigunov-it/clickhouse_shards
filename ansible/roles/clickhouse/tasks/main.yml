@@ -40,6 +40,14 @@
     group: clickhouse
     mode: "400"
 
+- name: Copy clickhouse users config
+  ansible.builtin.template:
+    dest: /etc/clickhouse-server/users.xml
+    src: ch_config/users.xml.j2
+    owner: clickhouse
+    group: clickhouse
+    mode: "400"
+
 - name: Start clickhouse service
   ansible.builtin.service:
     name: clickhouse-server
