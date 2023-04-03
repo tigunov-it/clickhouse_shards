@@ -1,5 +1,6 @@
 resource "aws_spot_instance_request" "clickhouse" {
-  ami                         = "ami-0f122bc12c5fd6da8"
+#  ami                         = "ami-0f122bc12c5fd6da8" // Alma Linux 8 (RedHat family)
+  ami                         = "ami-064087b8d355e9051" // Ubuntu Server 22.04
   count                       = length(var.devs)
   instance_type               = "t3.medium"
   vpc_security_group_ids      = [aws_security_group.clickhouse.id]
@@ -19,7 +20,7 @@ resource "aws_spot_instance_request" "clickhouse" {
 }
 
 resource "aws_vpc" "clickhouse" {
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = "10.8.8.0/24"
   instance_tenancy     = "default"
   enable_dns_hostnames = true
   tags                 = {
@@ -36,7 +37,7 @@ resource "aws_internet_gateway" "internet-gateway-clickhouse" {
 
 resource "aws_subnet" "public-subnet-1" {
   vpc_id                  = aws_vpc.clickhouse.id
-  cidr_block              = "10.0.0.0/16"
+  cidr_block              = "10.8.8.0/24"
   availability_zone       = "eu-north-1b"
   map_public_ip_on_launch = true
   tags                    = {
@@ -79,7 +80,7 @@ resource "aws_security_group" "clickhouse" {
     from_port = 0
     protocol  = "-1"
     to_port   = 0
-    cidr_blocks = ["10.0.0.0/16"]
+    cidr_blocks = ["10.8.8.0/24"]
   }
 
   egress {
