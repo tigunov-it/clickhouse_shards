@@ -1,17 +1,36 @@
 ---
 # tasks file for zookeeper
 ######## Install Java ########
-- name: Copy rmp Liberica JDK
-  ansible.builtin.get_url:
-    dest: /tmp
-    url: https://download.bell-sw.com/java/17.0.6+10/bellsoft-jdk17.0.6+10-linux-amd64.rpm
-    mode: "755"
+- name: Install Java on RedHat
+  block:
+    - name: Copy rmp Liberica JDK
+      ansible.builtin.get_url:
+        dest: /tmp
+        url: https://download.bell-sw.com/java/17.0.6+10/bellsoft-jdk17.0.6+10-linux-amd64.rpm
+        mode: "755"
 
-- name: Install java (Liberica JDK https://bell-sw.com/pages/downloads/)
-  ansible.builtin.dnf:
-    name: /tmp/bellsoft-jdk17.0.6+10-linux-amd64.rpm
-    state: present
-    disable_gpg_check: true
+    - name: Install java (Liberica JDK https://bell-sw.com/pages/downloads/)
+      ansible.builtin.dnf:
+        name: /tmp/bellsoft-jdk17.0.6+10-linux-amd64.rpm
+        state: present
+        disable_gpg_check: true
+
+  when: ansible_facts['os_family'] == 'RedHat'
+
+
+- name: Install Java on Ubuntu
+  block:
+    - name: Copy rmp Liberica JDK
+      ansible.builtin.get_url:
+        dest: /tmp
+        url: https://download.bell-sw.com/java/17.0.6+10/bellsoft-jdk17.0.6+10-linux-amd64.deb
+        mode: "755"
+
+    - name: Install java (Liberica JDK https://bell-sw.com/pages/downloads/)
+      ansible.builtin.apt:
+        deb: /tmp/bellsoft-jdk17.0.6+10-linux-amd64.deb
+
+  when: ansible_facts['os_family'] == 'Debian'
 
 ######## Install and config zookeeper ########
 - name: Add the user 'zookeeper' for zookeeper
@@ -56,7 +75,6 @@
     state: directory
     owner: zookeeper
     group: zookeeper
-
 
 - name: Copy zookeeper myid
   ansible.builtin.template:

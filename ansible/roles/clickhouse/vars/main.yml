@@ -1,6 +1,7 @@
 ---
 # vars file for clickhouse
-ch1: "10.0.61.0"
-ch2: "10.0.161.47"
-ch3: "10.0.67.66"
+ch1: "10.0.0.113"
+ch2: "10.0.0.116"
+ch3: "10.0.0.232"
+ch4: "10.0.0.77"
 database_dir: "/var/lib/clickhouse/"

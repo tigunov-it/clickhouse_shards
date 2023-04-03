@@ -1,28 +1,51 @@
 ---
 # tasks file for clickhouse
-- name: Copy clickhouse rpms
-  ansible.builtin.copy:
-    dest: /tmp
-    src: ch_distr
-    mode: "755"
+- name: Install ClickHouse on RedHat
+  block:
+    - name: Copy clickhouse rpms (from local files)
+      ansible.builtin.copy:
+        dest: /tmp
+        src: ch_distr
+        mode: "755"
 
-- name: Install clickhouse rpm from a local file (clickhouse-common-static)
-  ansible.builtin.dnf:
-    name: /tmp/ch_distr/clickhouse-common-static-23.2.4.12.x86_64.rpm
-    state: present
-    disable_gpg_check: true
+    - name: Install clickhouse rpm from a local file (clickhouse-common-static)
+      ansible.builtin.dnf:
+        name: /tmp/ch_distr/clickhouse-common-static-23.2.4.12.x86_64.rpm
+        state: present
+        disable_gpg_check: true
 
-- name: Install clickhouse rpm from a local file (clickhouse-server)
-  ansible.builtin.dnf:
-    name: /tmp/ch_distr/clickhouse-server-23.2.4.12.x86_64.rpm
-    state: present
-    disable_gpg_check: true
+    - name: Install clickhouse rpm from a local file (clickhouse-server)
+      ansible.builtin.dnf:
+        name: /tmp/ch_distr/clickhouse-server-23.2.4.12.x86_64.rpm
+        state: present
+        disable_gpg_check: true
 
-- name: Install clickhouse rpm from a local file (clickhouse-client)
-  ansible.builtin.dnf:
-    name: /tmp/ch_distr/clickhouse-client-23.2.4.12.x86_64.rpm
-    state: present
-    disable_gpg_check: true
+    - name: Install clickhouse rpm from a local file (clickhouse-client)
+      ansible.builtin.dnf:
+        name: /tmp/ch_distr/clickhouse-client-23.2.4.12.x86_64.rpm
+        state: present
+        disable_gpg_check: true
+
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: Install ClickHouse on Ubuntu (from local files)
+  block:
+    - name: Copy clickhouse debs
+      ansible.builtin.copy:
+        dest: /tmp
+        src: ch_distr_deb
+        mode: "755"
+
+    - name: Install clickhouse deb from a local file (clickhouse-common-static)
+      ansible.builtin.command: apt install /tmp/ch_distr_deb/clickhouse-common-static_23.2.4.12_amd64.deb -y
+
+    - name: Install clickhouse deb from a local file (clickhouse-server)
+      ansible.builtin.shell: DEBIAN_FRONTEND=noninteractive apt install /tmp/ch_distr_deb/clickhouse-server_23.2.4.12_amd64.deb -y
+
+    - name: Install clickhouse deb from a local file (clickhouse-client)
+      ansible.builtin.command: apt install /tmp/ch_distr_deb/clickhouse-client_23.2.4.12_amd64.deb -y
+
+  when: ansible_facts['os_family'] == 'Debian'
 
 - name: Copy clickhouse config
   ansible.builtin.template:

@@ -3,7 +3,7 @@
     <clickhouse_remote_servers>
         <mycluster> // Название кластера
 
-            <shard> // Конфигурация один шард и три реплики
+            <shard> // Первый шард и две реплики
 
                 <internal_replication>true</internal_replication> // при использовании zookeeper - true
 
@@ -17,8 +17,19 @@
                     <port>9000</port>
                 </replica>
 
+            </shard>
+
+            <shard> // Второй шард и две реплики
+
+                <internal_replication>true</internal_replication> // при использовании zookeeper - true
+
                 <replica>
                     <host>{{ ch3 }}</host> // третья нода в нашем кластере
+                    <port>9000</port>
+                </replica>
+
+                <replica>
+                    <host>{{ ch4 }}</host> // четвертая нода в нашем кластере
                     <port>9000</port>
                 </replica>
 
